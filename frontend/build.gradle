@@ -1,0 +1,29 @@
+// Add the plugin into the build.
+plugins {
+    id "idea"
+    id "base"
+    id "com.github.node-gradle.node" version "7.1.0"
+}
+
+// Configure the plugin to download and use specific Node version
+node {
+    download = true
+    version = "22.16.0"
+}
+
+// Register NpmTask that will do what "npm run build" command does.
+tasks.register('npmBuild', NpmTask) {
+    args = ['run', 'build']
+}
+
+// Register NpmTask that will do what "npm run dev" command does.
+tasks.register('npmDev', NpmTask) {
+    args = ['run', 'dev']
+}
+
+tasks.register("buildDockerImage", Exec) {
+    group = "docker"
+    description = "Build Frontend Docker image"
+
+    commandLine 'docker', 'build', '-t', 'insurance-app-frontend:latest', '.'
+}
