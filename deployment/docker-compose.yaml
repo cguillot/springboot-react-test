@@ -1,23 +1,38 @@
 services:
   frontend:
     image: insurance-app-frontend:latest
+    container_name: insurance_app_frontend_1
     ports:
       - "8080:80"
     depends_on:
       - backend
+    networks:
+      - insurance_app_network_1 
 
   backend:
     image: insurance-app:latest
+    container_name: insurance_app_backend_1
+    depends_on:
+      - postgres
     environment:
       - spring.datasource.url=jdbc:postgresql://postgres:5432/insurance-app-prod-db
       - spring.datasource.username=insurance-app-prod-db-user
       - spring.datasource.password=secret
     ports:
       - "8090:8080"
+    networks:
+      - insurance_app_network_1 
 
   postgres:
     image: 'postgres:latest'
+    container_name: insurance_app_postgres_1
     environment:
       - 'POSTGRES_DB=insurance-app-prod-db'
       - 'POSTGRES_PASSWORD=secret'
       - 'POSTGRES_USER=insurance-app-prod-db-user'
+    networks:
+      - insurance_app_network_1
+
+networks:
+  insurance_app_network_1:
+    driver: bridge
