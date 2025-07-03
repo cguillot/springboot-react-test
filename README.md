@@ -12,7 +12,7 @@
 # Running locally
 
 ```
-docker-compose -f .\deployment\docker-compose.yaml up
+docker-compose -f ./deployment/docker-compose.yaml up
 ```
 
 Open http://localhost:8080
