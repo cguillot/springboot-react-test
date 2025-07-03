@@ -47,6 +47,11 @@ dependencies {
     mockitoAgent(libs.mockito) {
         transitive = false
     }
+    // Cucumber dependencies for BDD testing
+    testImplementation 'org.junit.platform:junit-platform-suite'
+    testImplementation 'io.cucumber:cucumber-java:7.18.0'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.18.0'
+    testImplementation 'io.cucumber:cucumber-spring:7.18.0'
     testRuntimeOnly 'com.h2database:h2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

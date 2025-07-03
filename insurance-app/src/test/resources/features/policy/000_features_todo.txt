@@ -1,0 +1,77 @@
+================================================
+Feature: Simple Insurance Policy Creation
+  As an insurance administrator
+  I want to create insurance policies
+  So that I can manage customer coverage
+
+  Scenario: Create a basic insurance policy
+    Given the insurance application is running
+    When I create a policy with name "Basic Auto Insurance" and status "ACTIVE"
+    Then the policy should be created successfully
+    And the policy should have name "Basic Auto Insurance"
+    And the policy should have status "ACTIVE"
+
+  Scenario: Retrieve a policy by ID
+    Given the insurance application is running
+    And I have a policy with name "Home Insurance Policy"
+    When I retrieve the policy by its ID
+    Then I should get the policy details
+    And the policy name should be "Home Insurance Policy"
+
+================================================
+Feature: Insurance Policy Management
+  As an insurance administrator
+  I want to manage insurance policies
+  So that I can create, read, update, and delete policies effectively
+
+  Background:
+    Given the insurance application is running
+    And the database is clean
+
+
+
+  Scenario: Retrieve an existing insurance policy
+    Given I have an existing insurance policy with name "Home Insurance"
+    When I retrieve the policy by its ID
+    Then I should get the policy details
+    And the policy name should be "Home Insurance"
+
+  Scenario: Update an existing insurance policy
+    Given I have an existing insurance policy with name "Travel Insurance"
+    When I update the policy with the following details:
+      | name        | Travel Insurance Premium |
+      | status      | INACTIVE                 |
+    Then the policy should be updated successfully
+    And the policy should have the updated details:
+      | name        | Travel Insurance Premium |
+      | status      | INACTIVE                 |
+
+  Scenario: Delete an existing insurance policy
+    Given I have an existing insurance policy with name "Life Insurance"
+    When I delete the policy
+    Then the policy should be deleted successfully
+    And the policy should not exist in the system
+
+  Scenario: List all insurance policies
+    Given I have the following insurance policies:
+      | name              | status   | startDate  | endDate    |
+      | Auto Insurance    | ACTIVE   | 2024-01-01 | 2024-12-31 |
+      | Home Insurance    | ACTIVE   | 2024-02-01 | 2025-01-31 |
+      | Travel Insurance  | INACTIVE | 2024-03-01 | 2024-08-31 |
+    When I request all policies
+    Then I should get 3 policies
+    And the policies should be returned in the correct format
+
+  Scenario: Validation error when creating policy with invalid data
+    When I try to create a policy with the following invalid details:
+      | name        |                |
+      | status      | ACTIVE         |
+      | startDate   | 2024-01-01     |
+      | endDate     | 2024-12-31     |
+    Then I should get a validation error
+    And the error should mention "name cannot be blank"
+
+  Scenario: Error when retrieving non-existent policy
+    When I try to retrieve a policy with ID 999999
+    Then I should get a not found error
+    And the error should mention "Policy with ID 999999 does not exist"
